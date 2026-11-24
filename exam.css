@@ -1,0 +1,438 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Playpen Sans", cursive, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #eef2f7;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 16px;
+    transition: background-color 0.3s ease, background-image 0.3s ease;
+    color: #1f2937;
+}
+
+.screen {
+    display: none;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* Всплывающая плашка достижения */
+.achievement-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: min(90vw, 380px);
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #ffffff;
+    padding: 12px 18px;
+    border-radius: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.35;
+    opacity: 0;
+    transform: translateY(-16px);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.achievement-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Заставка */
+.menu-card {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(10px);
+    padding: clamp(28px, 4.5vw, 44px) clamp(24px, 4.5vw, 40px);
+    border-radius: 28px;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+    width: 100%;
+    max-width: 490px;
+    min-height: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    gap: 18px;
+}
+
+.game-title {
+    font-family: "Mystery Quest", cursive, sans-serif;
+    margin: 0;
+    font-size: clamp(46px, 7vw, 68px);
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    line-height: 1.05;
+    color: #111827;
+}
+
+.game-subtitle {
+    margin: 0;
+    max-width: 34ch;
+    color: #4b5563;
+    font-size: clamp(14px, 2vw, 16px);
+    line-height: 1.45;
+}
+
+/* Блок последнего достижения в меню */
+.latest-achievement-box {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background-color: #fef3c7;
+    border: 1px solid #f59e0b;
+    color: #78350f;
+}
+
+.latest-achievement-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    opacity: 0.85;
+    margin-bottom: 4px;
+}
+
+.latest-achievement-value {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.menu-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn {
+    font-family: "Playpen Sans", cursive, sans-serif;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.14s ease, opacity 0.15s ease, background-color 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.96;
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.play-btn {
+    padding: 16px 24px;
+    font-size: 20px;
+    font-weight: 700;
+    background-color: #111111;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(17, 17, 17, 0.22);
+}
+
+.play-btn:hover {
+    background-color: #262626;
+}
+
+.settings-btn {
+    padding: 15px 24px;
+    font-size: 18px;
+    font-weight: 700;
+    background-color: #e5e7eb;
+    color: #111827;
+}
+
+.settings-btn:hover {
+    background-color: #d1d5db;
+}
+
+/* Окно настроек */
+.settings-card {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(10px);
+    padding: 28px 32px;
+    border-radius: 24px;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 540px;
+    text-align: center;
+}
+
+.settings-card h2 {
+    margin: 0 0 18px;
+    color: #1f2937;
+    font-size: 24px;
+}
+
+.setting-group {
+    text-align: left;
+    margin-bottom: 14px;
+}
+
+.setting-group > label:not(.checkbox-label) {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #1f2937;
+}
+
+.checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: #1f2937;
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #111111;
+    cursor: pointer;
+}
+
+input[type="range"] {
+    width: 100%;
+    cursor: pointer;
+}
+
+select,
+input[type="url"] {
+    font-family: "Playpen Sans", cursive, sans-serif;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    font-size: 14px;
+    background-color: #fff;
+    color: #1f2937;
+}
+
+.bg-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.bg-preset-btn {
+    font-family: "Playpen Sans", cursive, sans-serif;
+    padding: 7px 12px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    background-color: #f8fafc;
+    color: #1e293b;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.bg-preset-btn.active {
+    background-color: #111111;
+    color: #fff;
+    border-color: #111111;
+}
+
+.custom-bg-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    font-size: 14px;
+    color: #334155;
+}
+
+.custom-bg-row input[type="color"] {
+    width: 48px;
+    height: 36px;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.custom-bg-row input[type="file"] {
+    flex: 1;
+    font-size: 13px;
+}
+
+.settings-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.settings-actions .btn {
+    flex: 1;
+}
+
+.primary-btn {
+    background-color: #111111;
+    color: #fff;
+}
+
+.secondary-btn {
+    background-color: #e5e7eb;
+    color: #1f2937;
+}
+
+.small-btn {
+    padding: 8px 14px;
+    font-size: 14px;
+    background-color: #1f2937;
+    color: #fff;
+}
+
+/* Игровой экран */
+.game-wrapper {
+    width: 100%;
+    max-width: 95vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.panel {
+    width: 100%;
+    max-width: 92vmin;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 10px 18px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    font-size: clamp(15px, 2vmin, 20px);
+    color: #1f2937;
+}
+
+.panel-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.hud-game-title {
+    font-family: "Mystery Quest", cursive, sans-serif;
+    font-size: clamp(24px, 3.2vmin, 34px);
+    letter-spacing: 1px;
+    color: #111827;
+}
+
+.timer-label.hidden {
+    display: none;
+}
+
+.panel-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Зелёный div для сообщений */
+.status-banner {
+    display: none;
+    background-color: #16a34a;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: clamp(15px, 2.2vmin, 20px);
+    padding: 8px 20px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    text-align: center;
+    box-shadow: 0 6px 16px rgba(22, 163, 74, 0.28);
+}
+
+.status-banner.visible {
+    display: inline-block;
+}
+
+#cards-container {
+    display: grid;
+    gap: clamp(8px, 1.5vmin, 18px);
+    width: min(92vw, 105vh);
+    height: min(74vh, 76vw);
+    perspective: 1000px;
+}
+
+.card {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    position: relative;
+}
+
+.card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+    border-radius: clamp(8px, 1.5vmin, 16px);
+}
+
+.card.is-open .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card:hover:not(.is-open) .card-inner {
+    transform: scale(1.02);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    inset: 0;
+    border-radius: clamp(8px, 1.5vmin, 16px);
+    backface-visibility: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.14);
+    border: clamp(2px, 0.35vmin, 4px) solid rgba(255, 255, 255, 0.9);
+}
+
+.card-front {
+    background-color: #6b7280;
+    border-color: #e5e7eb;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+
+.card-emoji {
+    font-size: clamp(22px, 5vmin, 56px);
+    line-height: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+}

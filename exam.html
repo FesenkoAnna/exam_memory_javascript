@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mystery+Quest&family=Playpen+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="exam.css">
+</head>
+<body>
+    <!-- Всплывающая плашка достижения -->
+    <div id="achievement-toast" class="achievement-toast" role="status" aria-live="polite"></div>
+
+    <!-- Начальная заставка -->
+    <div id="start-screen" class="screen active">
+        <div class="menu-card">
+            <h1 class="game-title">Memory</h1>
+            <p class="game-subtitle">Найди все пары карточек за минимальное число ходов</p>
+
+            <div class="latest-achievement-box">
+                <span class="latest-achievement-label">Последнее достижение:</span>
+                <div id="menu-latest-achievement" class="latest-achievement-value">Пока нет достижений</div>
+            </div>
+
+            <div class="menu-buttons">
+                <button id="play-btn" class="btn play-btn">Играть</button>
+                <button id="open-settings-start-btn" class="btn settings-btn">Настройки</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Экран настроек -->
+    <div id="settings-screen" class="screen">
+        <div class="settings-card">
+            <h2>Настройки игры</h2>
+
+            <div class="setting-group">
+                <label for="memorize-time-input">
+                    Время на запоминание: <strong id="memorize-time-value">3</strong> сек
+                </label>
+                <input
+                    type="range"
+                    id="memorize-time-input"
+                    min="1"
+                    max="10"
+                    step="1"
+                    value="3"
+                >
+            </div>
+
+            <div class="setting-group">
+                <label for="board-size-select">Размер поля</label>
+                <select id="board-size-select">
+                    <option value="3x4">3 × 4 (12 карточек)</option>
+                    <option value="4x4">4 × 4 (16 карточек)</option>
+                    <option value="4x6">4 × 6 (24 карточки)</option>
+                    <option value="6x6">6 × 6 (36 карточек)</option>
+                </select>
+            </div>
+
+            <div class="setting-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="timer-enabled-input" checked>
+                    <span>Включить таймер прохождения</span>
+                </label>
+            </div>
+
+            <div class="setting-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="sound-enabled-input" checked>
+                    <span>Звуковые эффекты (переворот, пара, победа)</span>
+                </label>
+            </div>
+
+            <div class="setting-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="music-enabled-input" checked>
+                    <span>Фоновая музыка</span>
+                </label>
+            </div>
+
+            <div class="setting-group">
+                <label>Фон игры</label>
+                <div class="bg-options">
+                    <button type="button" class="bg-preset-btn active" data-bg-type="color" data-bg-value="#eef2f7">
+                        Светлый цвет
+                    </button>
+                    <button type="button" class="bg-preset-btn" data-bg-type="color" data-bg-value="#1e2430">
+                        Тёмный цвет
+                    </button>
+                    <button type="button" class="bg-preset-btn" data-bg-type="stock" data-bg-value="sea">
+                        Море
+                    </button>
+                    <button type="button" class="bg-preset-btn" data-bg-type="stock" data-bg-value="sunset">
+                        Закат
+                    </button>
+                    <button type="button" class="bg-preset-btn" data-bg-type="stock" data-bg-value="forest">
+                        Лес
+                    </button>
+                    <button type="button" class="bg-preset-btn" data-bg-type="stock" data-bg-value="waterfall">
+                        Водопад
+                    </button>
+                    <button type="button" class="bg-preset-btn" data-bg-type="stock" data-bg-value="night">
+                        Ночное небо
+                    </button>
+                </div>
+
+                <div class="custom-bg-row">
+                    <label for="custom-bg-color">Свой цвет:</label>
+                    <input type="color" id="custom-bg-color" value="#eef2f7">
+                </div>
+
+                <div class="custom-bg-row">
+                    <label for="custom-bg-file">Своя картинка (файл):</label>
+                    <input type="file" id="custom-bg-file" accept="image/*">
+                </div>
+
+                <div class="custom-bg-row">
+                    <input type="url" id="custom-bg-url" placeholder="Или вставьте ссылку на изображение (https://...)">
+                    <button type="button" id="apply-bg-url-btn" class="btn small-btn">Применить</button>
+                </div>
+            </div>
+
+            <div class="settings-actions">
+                <button id="save-settings-btn" class="btn primary-btn">Сохранить</button>
+                <button id="back-to-menu-btn" class="btn secondary-btn">В меню</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Игровой экран -->
+    <div id="game-screen" class="screen">
+        <div class="game-wrapper">
+            <div class="panel">
+                <div class="panel-left">
+                    <span class="hud-game-title">Memory</span>
+                    <span class="moves-label">Ходы: <strong id="moves-count">0</strong></span>
+                    <span id="timer-box" class="timer-label">Время: <strong id="timer-count">00:00</strong></span>
+                </div>
+                <div class="panel-buttons">
+                    <button id="open-settings-game-btn" class="btn small-btn">Настройки</button>
+                    <button id="restart-btn" class="btn small-btn">Сыграть заново</button>
+                    <button id="menu-btn" class="btn small-btn">Меню</button>
+                </div>
+            </div>
+
+            <div id="status-banner" class="status-banner" aria-live="polite"></div>
+
+            <div id="cards-container"></div>
+        </div>
+    </div>
+
+    <script src="exam.js"></script>
+</body>
+</html>
